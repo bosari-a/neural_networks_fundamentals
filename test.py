@@ -42,6 +42,6 @@ W = W.reshape((4, 3))
 
 Y = np.add(np.matmul(W, X), B)
 
-Z = np.multiply(W,2)
-Z = np.subtract(Z,W)
-pprint(W.T)
+Z = np.multiply(W, 2)
+Z = np.subtract(Z, W)
+pprint(1-np.tanh(3)**2)

@@ -1,5 +1,14 @@
-import numpy as np
 from pprint import pprint
+import time
+import numpy as np
+from tqdm import tqdm
+
+arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+
+for e in tqdm(arr):
+    time.sleep(1)
+    print("\n", e)
 
 
 class Vehicles:
@@ -44,4 +53,4 @@ Y = np.add(np.matmul(W, X), B)
 
 Z = np.multiply(W, 2)
 Z = np.subtract(Z, W)
-pprint(1-np.tanh(3)**2)
+# pprint(1-np.tanh(3)**2)

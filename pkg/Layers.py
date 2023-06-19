@@ -3,8 +3,8 @@ import numpy as np
 
 
 class Layer:
-    def __init__(self, input_val):
-        self.input_val = input_val
+    def __init__(self):
+        self.input_val = None
         self.output = None
 
     def forward(self):
@@ -19,15 +19,17 @@ class Layer:
 
 
 class Dense(Layer):
-    def __init__(self, input_val, output_size):
-        self.output_size = output_size
-        super().__init__(input_val)
-        self.weights = np.random.randn(output_size, np.shape(input_val)[0])
-        self.bias = np.random.randn(output_size, 1)
+    def __init__(self, input_rows, output_rows):
+        super().__init__()
+        self.input_rows = input_rows
+        self.output_rows = output_rows
+        self.weights = np.random.randn(output_rows, input_rows)
+        self.bias = np.random.randn(output_rows, 1)
 
-    def forward(self):
+    def forward(self, input_val):
+        self.input_val = input_val
         self.output = np.add(
-            np.matmul(self.weights, self.input_val), self.bias)
+            np.matmul(self.weights, input_val), self.bias)
         return self.output
 
     def backward(self, output_gradient, learning_rate):
@@ -42,16 +44,15 @@ class Dense(Layer):
 
 
 class Activation(Layer):
-    def __init__(self, input_val, activation, activation_prime, output_gradient):
-        super().__init__(input_val)
+    def __init__(self, activation, activation_prime):
+        super().__init__()
         self.activation_prime = activation_prime
         self.activation = activation
-        self.output_gradient = output_gradient
 
-    def forward(self):
-        self.output = self.activation(self.input_val)
+    def forward(self, input_val):
+        self.output = self.activation(input_val)
         return self.output
 
-    def backward(self):
+    def backward(self, input_val, output_gradient):
         # todo: return derivative of error w.r.t input_val
-        return np.multiply(self.output_gradient, self.activation_prime(self.input_val))
+        return np.multiply(output_gradient, self.activation_prime(input_val))

@@ -6,10 +6,6 @@ from tqdm import tqdm
 arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
-for e in tqdm(arr):
-    time.sleep(1)
-    print("\n", e)
-
 
 class Vehicles:
     def __init__(self, type, brand):

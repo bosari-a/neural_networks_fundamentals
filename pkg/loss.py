@@ -6,4 +6,4 @@ def mse(y_nn, y_true):
 
 
 def mse_prime(y_nn, y_true):
-    return 2*np.mean(y_nn-y_true) 
+    return np.array(np.multiply(2, np.mean(y_nn-y_true)))

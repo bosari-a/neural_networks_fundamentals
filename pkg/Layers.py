@@ -27,14 +27,17 @@ class Dense(Layer):
         self.bias = np.random.randn(output_rows, 1)
 
     def forward(self, input_val):
-        self.input_val = input_val
+        self.input_val = input_val.reshape((self.input_rows, 1))
         self.output = np.add(
-            np.matmul(self.weights, input_val), self.bias)
+            np.dot(self.weights, input_val), self.bias)
+        self.output = self.output.reshape((self.output_rows, 1))
         return self.output
 
     def backward(self, output_gradient, learning_rate):
-        dE_dW = np.matmul(output_gradient, self.input_val.T)
-        dE_dX = np.matmul(self.weights.T, output_gradient)
+        dE_dW = np.dot(output_gradient, self.input_val.T)
+        dE_dW = dE_dW.reshape((self.output_rows, self.input_rows))
+        dE_dX = np.dot(self.weights.T, output_gradient)
+        dE_dX = dE_dX.reshape((self.input_rows, 1))
         self.weights = np.subtract(
             self.weights, np.multiply(learning_rate, dE_dW))
         self.bias -= np.multiply(learning_rate, output_gradient)
@@ -50,9 +53,13 @@ class Activation(Layer):
         self.activation = activation
 
     def forward(self, input_val):
+        self.input_val = input_val
         self.output = self.activation(input_val)
         return self.output
 
-    def backward(self, input_val, output_gradient):
+    def backward(self, output_gradient, learning_rate):
         # todo: return derivative of error w.r.t input_val
-        return np.multiply(output_gradient, self.activation_prime(input_val))
+        output_grad = np.multiply(
+            output_gradient, self.activation_prime(self.input_val))
+        output_grad = output_grad.reshape((self.input_val.shape[0], 1))
+        return output_grad
